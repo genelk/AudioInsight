@@ -2,7 +2,7 @@ import os
 import librosa
 import numpy as np
 import soundfile as sf
-from pydub import AudioSegment
+# from pydub import AudioSegment
 from typing import Tuple, Union, Dict, List, Optional
 
 
@@ -50,28 +50,28 @@ class AudioLoader:
                 duration=self.duration
             )
             return y, sr
-        except Exception as e:
-            # Fallback to pydub if librosa fails
-            print(f"Librosa loading failed, trying pydub: {e}")
-            try:
-                audio = AudioSegment.from_file(file_path)
-                if self.mono and audio.channels > 1:
-                    audio = audio.set_channels(1)
-                if self.sample_rate != audio.frame_rate:
-                    audio = audio.set_frame_rate(self.sample_rate)
+        # except Exception as e:
+        #     # Fallback to pydub if librosa fails
+        #     print(f"Librosa loading failed, trying pydub: {e}")
+        #     try:
+        #         audio = AudioSegment.from_file(file_path)
+        #         if self.mono and audio.channels > 1:
+        #             audio = audio.set_channels(1)
+        #         if self.sample_rate != audio.frame_rate:
+        #             audio = audio.set_frame_rate(self.sample_rate)
                 
-                # Convert to numpy array
-                samples = np.array(audio.get_array_of_samples(), dtype=np.float32)
-                # Normalize
-                samples = samples / (2.0 ** (8 * audio.sample_width))
+        #         # Convert to numpy array
+        #         samples = np.array(audio.get_array_of_samples(), dtype=np.float32)
+        #         # Normalize
+        #         samples = samples / (2.0 ** (8 * audio.sample_width))
                 
-                if self.duration is not None:
-                    max_samples = int(self.duration * self.sample_rate)
-                    if len(samples) > max_samples:
-                        samples = samples[:max_samples]
+        #         if self.duration is not None:
+        #             max_samples = int(self.duration * self.sample_rate)
+        #             if len(samples) > max_samples:
+        #                 samples = samples[:max_samples]
                 
-                return samples, self.sample_rate
-            except Exception as e2:
+        #         return samples, self.sample_rate
+        except Exception as e2:
                 raise ValueError(f"Failed to load audio file {file_path}: {e2}")
     
     def load_folder(self, folder_path: str) -> Dict[str, Tuple[np.ndarray, int]]:
