@@ -48,22 +48,17 @@ pip install -e ".[dev]"
 ```python
 from src.data.audio_loader import AudioLoader
 from src.data.feature_extraction import FeatureExtractor
-from src.models.emotion_analyzer import EmotionAnalyzer
 
-# Load audio file
+# Load an audio file
 loader = AudioLoader()
-audio, sr = loader.load_file("path/to/audio.wav")
+audio, sr = loader.load_file("path/to/audio")
 
 # Extract features
 extractor = FeatureExtractor()
 features = extractor.extract_features(audio, sr)
 features_df = extractor.features_to_dataframe(features)
 
-# Analyze emotion
-analyzer = EmotionAnalyzer()
-result = analyzer.predict(features_df)
-print(f"Detected emotion: {result['emotion']}")
-print(f"Probabilities: {result['probabilities']}")
+print(features_df.head())
 ```
 
 ### Using HuggingFace Models
@@ -74,7 +69,7 @@ from src.models.huggingface_models import HuggingFaceAudioModel
 
 # Load audio file
 loader = AudioLoader()
-audio, sr = loader.load_file("path/to/audio.wav")
+audio, sr = loader.load_file("path/to/audio")
 
 # Initialize model
 model = HuggingFaceAudioModel(task='emotion')
